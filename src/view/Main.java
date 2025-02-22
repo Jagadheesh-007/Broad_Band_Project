@@ -25,7 +25,8 @@ public class Main {
             System.out.println("5. View Billing Details");
             System.out.println("6. Give Feedback");
             System.out.println("7. Display Feedbacks");
-            System.out.println("8. Exit");
+            System.out.println("8. Logout");
+            System.out.println("9. Exit");
             System.out.println("\n====================================================================\n");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
@@ -98,9 +99,15 @@ public class Main {
                     feedbackController.submitFeedback(currentUser,feedback);
                     break;
                 case 7:
+                    System.out.println("Give your feedback here....");
                     feedbackController.getFeedback();
                     break;
                 case 8:
+                    System.out.println("Logged out "+currentUser.name+"................");
+                    currentUser = null;
+                    selectedPlan = null;
+                    break;
+                case 9:
                     System.out.println("Exiting...\n");
                     scanner.close();
                     return;

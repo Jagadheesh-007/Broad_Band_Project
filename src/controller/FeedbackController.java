@@ -14,11 +14,11 @@ public class FeedbackController {
             System.out.println("No Feedbacks.....");
             return;
         }
-        System.out.println("---------------------------Feedback Lists----------------------");
+        System.out.println("---------------------------Feedback Page----------------------");
         for(Feedback list : feedbackList)
         {
-            System.out.println(list.user.name);
-            System.out.println(list.comment);
+            System.out.println("User : "+list.user.name);
+            System.out.println("Message: "+list.comment);
             System.out.println();
         }
         System.out.println("---------------------------------------------------------------");
