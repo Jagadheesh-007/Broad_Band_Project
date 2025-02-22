@@ -7,20 +7,26 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         UserController userController = new UserController();
         LoginController loginController = new LoginController(userController.users);
+        BillingController billingController = new BillingController();
+        FeedbackController feedbackController = new FeedbackController();
         List<ServicePlan> plans = Arrays.asList(
             new ServicePlan("Basic", 499, 2, 30),
             new ServicePlan("Standard", 799, 4, 30),
             new ServicePlan("Premium", 999, 6, 30)
         );
         User currentUser = null;
+        ServicePlan selectedPlan = null;
         while (true) {
-            System.out.println("\n=== Broadband Service System ===");
+            System.out.println("\n==================== Broadband Service System ======================");
             System.out.println("1. Register User");
             System.out.println("2. Login");
             System.out.println("3. View Service Plans");
             System.out.println("4. Subscribe to a Plan");
             System.out.println("5. View Billing Details");
-            System.out.println("6. Exit");
+            System.out.println("6. Give Feedback");
+            System.out.println("7. Display Feedbacks");
+            System.out.println("8. Exit");
+            System.out.println("\n====================================================================\n");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -39,11 +45,12 @@ public class Main {
                     String loginEmail = scanner.nextLine();
                     System.out.print("Enter password: ");
                     String loginPassword = scanner.nextLine();
-                    if (loginController.authenticate(loginEmail, loginPassword)) {
+                    String loginName = loginController.authenticate(loginEmail, loginPassword);
+                    if (loginName!=null) {
                         System.out.println("Login Successful!");
-                        currentUser = new User("", loginEmail, "");
+                        currentUser = new User(loginName, loginEmail, loginPassword);
                     } else {
-                        System.out.println("Invalid credentials.");
+                        System.out.println("Invalid Password or email_id .............");
                     }
                     break;
                 case 3:
@@ -56,6 +63,11 @@ public class Main {
                         System.out.println("Please login first.");
                         break;
                     }
+                    if(selectedPlan!=null)
+                    {
+                        System.out.println("Plan in activation .............");
+                        break;
+                    }
                     System.out.println("Choose a plan:");
                     for (int i = 0; i < plans.size(); i++) {
                         System.out.println((i + 1) + ". " + plans.get(i).planName);
@@ -63,7 +75,7 @@ public class Main {
                     int planChoice = scanner.nextInt();
                     scanner.nextLine();
                     if (planChoice > 0 && planChoice <= plans.size()) {
-                        ServicePlan selectedPlan = plans.get(planChoice - 1);
+                        selectedPlan = plans.get(planChoice - 1);
                         System.out.println("Subscribed successfully to " + selectedPlan.planName);
                     } else {
                         System.out.println("Invalid choice.");
@@ -74,9 +86,21 @@ public class Main {
                         System.out.println("Please login first.");
                         break;
                     }
-                    System.out.println("Billing details for " + currentUser.email);
+                    if(selectedPlan == null)
+                    {
+                        System.out.println("Subscribe the plan first...");
+                        break;
+                    }
+                    billingController.generateBill(currentUser,selectedPlan);
                     break;
                 case 6:
+                    String feedback = scanner.nextLine();
+                    feedbackController.submitFeedback(currentUser,feedback);
+                    break;
+                case 7:
+                    feedbackController.getFeedback();
+                    break;
+                case 8:
                     System.out.println("Exiting...\n");
                     scanner.close();
                     return;

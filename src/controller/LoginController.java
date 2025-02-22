@@ -6,12 +6,12 @@ public class LoginController {
     public LoginController(List<User> users) {
         this.users = users;
     }
-    public boolean authenticate(String email, String password) {
+    public String authenticate(String email, String password) {
         for (User user : users) {
             if (user.email.equals(email) && user.password.equals(password)) {
-                return true;
+                return user.name;
             }
         }
-        return false;
+        return null;
     }
 }
